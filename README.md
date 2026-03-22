@@ -1,0 +1,1 @@
+Visual AI for Academia! Writing fuller readme soon. Thinking of putting this on an amplify frontend
