@@ -1,5 +1,7 @@
 import { useEffect, useRef } from 'react'
 import * as THREE from 'three'
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
+
 
 export default function ThreeCanvas() {
   const mountRef = useRef<HTMLDivElement>(null)
@@ -17,6 +19,13 @@ export default function ThreeCanvas() {
 
     camera.position.z = 5
 
+
+    /** test - this is totally crazy if this works: */
+    const controls = new OrbitControls(camera, renderer.domElement)
+    controls.enableDamping = true
+    controls.dampingFactor = 0.05
+    renderer.domElement.style.pointerEvents = 'auto'
+
     /** raw visualization loop */
     let animFrameId: number
     let currentUpdateScene = (_t: number) => {}
@@ -25,6 +34,8 @@ export default function ThreeCanvas() {
     function loop() {
       animFrameId = requestAnimationFrame(loop)
       const t = (performance.now() - startTime) / 1000
+      /** test update: */
+      controls.update()
       currentUpdateScene(t)
       renderer.render(scene, camera)
     }
@@ -55,6 +66,7 @@ export default function ThreeCanvas() {
 
     return () => {
       cancelAnimationFrame(animFrameId)
+      controls.dispose()
       window.removeEventListener('resize', onResize)
       mount.removeChild(renderer.domElement)
     }
